@@ -1,64 +1,54 @@
-# EX 5A Minimum Cost Path
+# EX 5B Coin Change Problem
 ## DATE:
 ## AIM:
-To write a Python program using A Naive recursive implementation of Minimum Cost Path Problem.
+To compute the fewest number of coins that we need to make up the amount given.
 
 
 ## Algorithm:
 
-1. **Handle Base Cases:**  
-   - If the destination cell `(m, n)` is out of bounds, return the maximum possible integer to indicate an invalid path.  
-   - If the starting cell `(0, 0)` is reached, return the cost of that cell, as no more movement is required.  
+1. **Initialize the DP Array:**  
+   - Create a `dp` array of size `(amount + 1)` initialized to **infinity** (representing unreachable amounts).  
+   - Set `dp[0]` to `0`, as zero coins are needed to make a total of 0.  
 
-2. **Recursive Cost Calculation:**  
-   - If the current cell is not the starting cell, add its cost to the minimum cost required to reach it from one of its possible neighbors:  
-   - **Possible moves:**  
-     - Diagonal `(m-1, n-1)`  
-     - Up `(m-1, n)`  
-     - Left `(m, n-1)`  
-
-3. **Custom Minimum Function:**  
-   - Use a custom `min()` function to select the smallest cost among the possible moves to ensure you get the minimum cost path.  
-
-4. **Return the Minimum Cost:**  
-   - Return the minimum cost calculated from the above steps as the final result.  
+2. **Fill the DP Array:**  
+   - For each coin in the list, update the `dp` values for all possible amounts from the coin's value to the target amount.  
+   - Use the relation: `dp[i] = min(dp[i], dp[i - coin] + 1)`
+3. If the final entry in the `dp` array (`dp[amount]`) is still infinity, return -1 to indicate that the amount cannot be formed.
+4. Otherwise, return the value at `dp[amount]`, representing the minimum number of coins required.
+   
 
 ## Program:
 ```
 /*
-A program to implement to find the Minimum Cost Path Problem using a  Naive recursive Approach.
+Create a python function to compute the fewest number of coins that we need to make up the amount given.
 
 Developed by: YOHESH KUMAR R.M
 Register Number: 212222240118
 */
 
+class Solution(object):
+   def coinChange(self, coins, amount):
+       dp = [float('inf')] * (amount + 1)
+       dp[0]=0
+       for coin in coins:
+           for i in range(coin, amount + 1):
+               dp[i] = min(dp[i], dp[i - coin] + 1)
+       return dp[amount] if dp[amount]!=float('inf') else -1
+      
+ob1 = Solution()
+n=int(input())
+s=[]
+amt=int(input())
+for i in range(n):
+    s.append(int(input()))
 
-R = int(input())
-C = int(input())
-import sys
-def minCost(cost, m, n):
-    if (n < 0 or m < 0):
-        return sys.maxsize
-    elif (m == 0 and n == 0):
-        return cost[m][n]
-    else:
-        return cost[m][n] + min( minCost(cost, m-1, n-1),
-                                minCost(cost, m-1, n),
-                                minCost(cost, m, n-1) )
-def min(x, y, z):
-    if (x < y):
-        return x if (x < z) else z
-    else:
-        return y if (y < z) else z
-cost= [ [1, 2, 3],
-        [4, 8, 2],
-        [1, 5, 3] ]
-print(minCost(cost, R-1, C-1))
+print(ob1.coinChange(s,amt))
 ```
 
 ## Output:
 
-![image](https://github.com/user-attachments/assets/6411ba3f-eaa8-439f-902f-f0bfeb4ac481)
+![image](https://github.com/user-attachments/assets/6f115770-0bcf-497d-a6b9-a87da8415d2d)
+
 
 ## Result:
-Thus the above program was executed successfully for finding the minimum cost.
+Thus the program was executed successfully for finding the minimum number of coins required to make amount.
